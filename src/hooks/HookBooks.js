@@ -10,22 +10,12 @@ function HookBooks(search, limit) {
     setLoading(true);
     setError(false);
     if (search !== undefined && search !== "") {
-      /*
-      const res = await axios.get(
-        `https://www.googleapis.com/books/v1/volumes?q=${search}&startIndex=0&maxResults=${limit}`
-      );
-      await setBooks((prev) => [
-        ...new Set([...prev, ...res.data.items])
-      ]);
-      */
-
       await axios
         .get(
           `https://www.googleapis.com/books/v1/volumes?q=${search}&startIndex=0&maxResults=${limit}`
         )
         .then((res) => {
-          console.log(res.data.items);
-          setBooks(...res.data.items);
+          setBooks(res.data.items);
         })
         .catch((error) => setError(error));
 

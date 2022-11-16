@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Books from "./components/Books";
 import "./styles/index.scss";
 import HookBooks from "./hooks/HookBooks";
+import ReactLoading from 'react-loading';
 
 function App() {
   const [search, setSearch] = useState("");
@@ -43,19 +44,22 @@ function App() {
   return (
     <div className="App">
       <div className="search">
-        <h1>Rechercher un livre</h1>
+        <img src="./img/header.png" alt="" />
         <input
           type="search"
           name="livre"
           id="livre"
           value={isSearch}
           onChange={handleIsSearch}
+          placeholder="Rechercher un livre.."
         />
       </div>
       {books.length > 0 && <Books props={books} />}
       <div ref={loader}></div>
-      {loading && <h1>LOADING MA KICHE</h1>}
-      {error && <h1>ERREUR MA KICHE</h1>}
+      {loading && (
+        <ReactLoading type={"bubbles"} color={"black"} height={200} width={200} />
+      )}
+      {error && <h1>L'api ne peut pas récupérer plus de 40 livres</h1>}
     </div>
   );
 }
