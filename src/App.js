@@ -5,13 +5,14 @@ import HookBooks from "./hooks/HookBooks";
 
 function App() {
   const [search, setSearch] = useState("");
+  const [isSearch, setIsSearch] = useState("");
   const [limit, setLimit] = useState(1);
   const { loading, error, books } = HookBooks(search, limit);
   const loader = useRef(null);
 
   //Pour la recherche
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
+  const handleIsSearch = (e) => {
+    setIsSearch(e.target.value);
   };
 
   //Pour vérifier qu'on est en bas de la page
@@ -30,7 +31,14 @@ function App() {
     };
     const observer = new IntersectionObserver(handleObserver, option);
     if (loader.current) observer.observe(loader.current);
-  }, [handleObserver, search]);
+
+    //Pour mettre un delai dans la recherche
+    const delayDebounceFn = setTimeout(() => {
+      setSearch(isSearch);
+    }, 1000);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [handleObserver, isSearch]);
 
   return (
     <div className="App">
@@ -40,8 +48,8 @@ function App() {
           type="search"
           name="livre"
           id="livre"
-          value={search}
-          onChange={handleSearch}
+          value={isSearch}
+          onChange={handleIsSearch}
         />
       </div>
       {books.length > 0 && <Books props={books} />}
